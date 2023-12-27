@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Add necessary meta tags, title, and CSS styles -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSR ENGINEERING SERVICES</title>
+    <style>
+        /* Your CSS styles */
+        .container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            margin: 35px;
+            
+
+        }
+        .container-employee {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          
+          
+
+      }
+      .employee-details {
+        width: 20%;
+        margin :10px;
+     
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        align-items: center;
+        text-align :center;
+       
+    }
+
+        .chart-container {
+            width: 30vw;
+            height: 30vh;
+            margin: 20px;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+        .piechart-container {
+          width: 30vw;
+          height: 30vh;
+          margin: 0px;
+          border: 1px solid #ccc;
+          padding: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+      }
+        h1 {
+          width:500px;
+          margin: 0 auto;
+          background: white;
+          text-align: center;
+          color : green;
+      }
+      h3{
+        color: #6e6e6e;
+      }
+      .employee-details h3 {
+        margin: 8px; /* Reset default margin */
+    }
+    .table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      background-color: #fff;
+  }
+
+  .table th, .table td ,.table tr {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+  }
+
+  .table th {
+      background-color: #f2f2f2;
+  }
+
+  .alert {
+      margin-top: 20px;
+  }
+</style>
+    </style>
+</head>
+<body>
+  <div class ="container-employee ">
+  <h1> CSR ENGINEERING SERVICES</h1>
+  </div>
+  <div class="container-employee">
+    <div class="employee-details">
+        <h3>Name: {{ currentuser|safe }}</h3>
+        <h3>Employee ID: {{emp_id|safe}}</h3>
+    </div>
+    <div class="employee-details">
+        <h3>Blood Group: {{bg_grp|safe}}</h3>
+        <h3>Age:{{Age|safe}}</h3>
+    </div>
+    <div class="employee-details">
+      <h3>Role:{{role|safe}}</h3>
+      <h3>Experience:{{experience|safe}}</h3>
+  </div>
+  <div class="employee-details">
+    <h3>Contact No:{{contact|safe}}</h3>
+    <h3>MailId: {{mail_id|safe}}</h3>
+</div>
+
+</div>
+
+
+    <div class="container">
+    
+        <!-- First chart section: Line Chart -->
+        <div class="chart-container">
+            <canvas id="avgHoursChart"></canvas>
+        </div>
+
+        <!-- Second chart section: Bar Chart -->
+        <div class="chart-container">
+            <canvas id="barChart"></canvas>
+        </div>
+
+        <!-- Third chart section: Pie Chart -->
+        <div class="piechart-container">
+            <canvas id="pieChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Add Chart.js script for Line Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const ctx = document.getElementById('avgHoursChart');
+      const dates = [{{ dates | safe }}];
+      const avgHours = [{{ avg_hours | safe }}];
+  
+      new Chart(ctx, {
+          type: 'line',
+          data: {
+              labels: dates,
+              datasets: [{
+                  label: 'Average Hours per Day',
+                  borderColor: "#4CAF50",
+                  backgroundColor: "rgba(76, 175, 80, 0.4)",
+                  pointBackgroundColor: "#4CAF50",
+                  pointHoverBorderColor: "#4CAF50",
+                  pointHoverBackgroundColor: "Red",
+                  pointRadius: 4,
+                  data: avgHours,
+                  borderWidth: 1,
+                  fill: true,
+              }]
+          },
+          options: {
+              responsive: true,
+              plugins: {
+                  legend: {
+                      display: true,
+                      position: 'top',
+                  },
+                  title: {
+                      display: true,
+                      text: 'Average Hours per Day',
+                      font: {
+                          size: 18,
+                          weight: 'bold'
+                      }
+                  }
+              },
+              scales: {
+                  x: {
+                      title: {
+                          display: false,
+                          text: 'Date',
+                          font: {
+                              size: 16,
+                              weight: 'bold'
+                          }
+                      },
+                      ticks: {
+                          font: {
+                              size: 12,
+                              weight: 'bold'
+                          }
+                      }
+                  },
+                  y: {
+                      beginAtZero: true,
+                      title: {
+                          display: true,
+                          text: 'Average Hours',
+                          font: {
+                              size: 16,
+                              weight: 'bold'
+                          }
+                      },
+                      ticks: {
+                          font: {
+                              size: 12,
+                              weight: 'bold'
+                          }
+                      }
+                  }
+              }
+          }
+      });
+  </script>
+  
+  
+    <!-- Add Chart.js script for Bar Chart -->
+    <script>
+      const barCtx = document.getElementById('barChart').getContext('2d');
+    
+      new Chart(barCtx, {
+        type: 'bar',
+        data: {
+          labels: ["Current Month", "Previous Month", "Two Months Ago"],
+          datasets: [{
+            label: 'Days/Month',
+            backgroundColor: [
+              'rgba(142, 94, 162, 0.8)',
+              'rgba(78, 115, 223, 0.8)',
+              'rgba(255, 159, 64, 0.8)'
+            ],
+            data: [
+              {{attendance_data_current_month|safe}},
+              {{attendance_data_previous_month|safe}},
+              {{attendance_data_two_months_ago|safe}}
+            ],
+            borderWidth: 2,
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Attendance Comparison',
+              font: {
+                size: 18,
+                weight: 'bold'
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: {
+                display: false,
+              },
+              ticks: {
+                font: {
+                  size: 14,
+                  weight: 'bold'
+                }
+              }
+            },
+            y: {
+              beginAtZero: true,
+              ticks: {
+                font: {
+                  size: 14,
+                  weight: 'bold'
+                }
+              }
+            }
+          }
+        }
+      });
+  </script>
+  
+     
+    <!-- Add Chart.js script for Pie Chart -->
+   
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const pieCtx = document.getElementById('pieChart').getContext('2d');
+  
+      new Chart(pieCtx, {
+          type: 'pie',
+          data: {
+              labels: ["CL:12", "SL:7", "EL:12"],
+              datasets: [{
+                  label: 'Leaves Utilization',
+                  data: [{{ cl|safe }}, {{ sl|safe }}, {{ el|safe }}],
+                  backgroundColor: [
+                      'rgba(54, 162, 235, 0.8)',  // Blue for Casual Leaves
+                      'rgba(255, 99, 132, 0.8)',  // Red for Sick Leaves
+                      'rgba(255, 206, 86, 0.8)', // Yellow for Earned Leaves
+                  ],
+                  hoverOffset: 25, // Increase the hover size (adjust this value to your preference)
+                  borderColor: '#fff', // Border color for each segment
+                  borderWidth: 1, // Border width for each segment
+              }]
+          },
+          options: {
+              responsive: true,
+              plugins: {
+                  legend: {
+                      position: 'right',
+                      align: 'center',
+                      labels: {
+                          boxWidth: 8, // Adjust legend box width
+                          usePointStyle: true, // Use point style for legend markers
+                      },
+                  },
+                  title: {
+                      display: true,
+                      text: 'Leaves Utilization',
+                      font: {
+                          size: 16, // Adjust title font size
+                          weight: 'bold', // Set title font weight
+                      },
+                  },
+              },
+              layout: {
+                  padding: {
+                      top: 0,
+                      bottom: 0,
+                  },
+              },
+          }
+      });
+  </script>
+    
+  <div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Entry Time</th>
+                <th>Exit Time</th>
+                <!-- Add more headers for other fields in your Attendance model -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for attendance_record in last_30_attendance %}
+                <tr>
+                    <td>{{ attendance_record.date }}</td>
+                    <td>{{ attendance_record.entry_time }}</td>
+                    <td>{{ attendance_record.exit_time }}</td>
+                    <!-- Add more cells for other fields in your Attendance model -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+</body>
+</html>

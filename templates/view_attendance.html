@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Attendance</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Add custom CSS styles here */
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        .employee-select {
+            width: 70%;
+        }
+
+        .table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: #fff;
+        }
+
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+        }
+
+        .alert {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>View Attendance</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="employee">Select Employee:</label>
+                <select class="form-control employee-select" name="employee" id="employee">
+                    <option value=""></option>
+                    {% for employee in employees %}
+                        <option value="{{ employee.id }}">{{ employee.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">View Attendance</button>
+        </form>
+
+        <div class="mt-4">
+            {% if attendance_records %}
+                <h3>Attendance Records for {{ selected_employee.username }}</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Entry Time</th>
+                            <th>Exit Time</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in attendance_records %}
+                            <tr>
+                                <td>{{ record.date }}</td>
+                                <td>{{ record.entry_time }}</td>
+                                <td>{{ record.exit_time }}</td>
+                                <td>
+                                    <a href="{% url 'edit_attendance' record.id %}" class="btn btn-primary">Edit</a>
+                                    <a href="{% url 'delete_attendance' record.id %}" class="btn btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="alert alert-warning" role="alert">
+                    No attendance records to display.
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Button to access the Employee Analysis page -->
+        <div class="mt-4">
+            <a href="#" id="employeeAnalysisBtn" class="btn btn-primary">Employee Analysis</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#employee').select2();
+
+            // Add a click event listener to the Employee Analysis button
+            $('#employeeAnalysisBtn').click(function() {
+                // Get the selected employee ID
+                var selectedEmployeeId = $('#employee').val();
+
+                // Redirect to the Employee Analysis page with the selected employee ID
+                window.location.href = "{% url 'employee_analysis' %}?employee_id=" + selectedEmployeeId;
+            });
+        });
+    </script>
+</body>
+</html>
+ 

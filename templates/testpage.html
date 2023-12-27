@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Add necessary meta tags, title, and CSS styles -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSR ENGINEERING SERVICES</title>
+    <style>
+        /* Your CSS styles */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chart-container {
+            width: 80vw;
+            height: 30vh;
+            margin: 20px;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CSR ENGINEERING SERVICES</h1>
+        
+
+        <!-- First chart section: Line Chart -->
+        <div class="chart-container">
+            <h2>Line Chart</h2>
+            <canvas id="avgHoursChart"></canvas>
+        </div>
+
+        <!-- Second chart section: Bar Chart -->
+        <div class="chart-container">
+            <h2>Bar Chart</h2>
+            <canvas id="barChart"></canvas>
+        </div>
+
+        <!-- Third chart section: Pie Chart -->
+        <div class="chart-container">
+            <h2>Pie Chart</h2>
+            <canvas id="pieChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Add Chart.js script for Line Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // JSON data containing dates and average hours
+        //var jsonData = JSON.parse('{"dates": ["2023-11-02", "2023-11-03"], "avg_hours": [9, 9]}');
+        //var dates = jsonData.dates;
+        //var avgHours = jsonData.avg_hours;
+        const ctx = document.getElementById('avgHoursChart');
+  
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: [{{dates|safe}}],
+            datasets: [{
+              label: 'AvgHours/day',
+              borderColor: "#8e5ea2",
+              data: [{{avg_hours|safe}}],
+              borderWidth: 4,
+              barThickness: 25,
+            },
+          
+            ]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+    </script>
+    <!-- Add Chart.js script for Bar Chart -->
+    <script>
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        // Setup Bar Chart using Chart.js
+        // Your Chart.js code for the Bar Chart here
+    </script>
+
+    <!-- Add Chart.js script for Pie Chart -->
+    <script>
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        // Setup Pie Chart using Chart.js
+        // Your Chart.js code for the Pie Chart here
+    </script>
+</body>
+</html>
